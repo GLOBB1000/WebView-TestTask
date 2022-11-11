@@ -11,7 +11,7 @@ public class MyFireBaseRemoteConfig : MonoBehaviour
 {
 	Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.Available;
 	// Use this for initialization
-	void Start() 
+	void Awake() 
 	{
 		Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
 			dependencyStatus = task.Result;
