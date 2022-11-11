@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "18304294047",
+	"firebase_url": "https://webviewtest-89bb3-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "webviewtest-89bb3",
+    "storage_bucket": "webviewtest-89bb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18304294047:android:b459f2fbd0c6f55ec3d6aa",
+        "android_client_info": {
+          "package_name": "com.testtask.webviewapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "18304294047-pds323ut8e2idsp4q1dhdlh2pbhcgt48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJj71gnqnQy9q5MQwDXVN4SZctd03IfBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "18304294047-pds323ut8e2idsp4q1dhdlh2pbhcgt48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
