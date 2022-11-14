@@ -22,13 +22,6 @@ public class ApplicationController : MonoBehaviour
 
     private bool isWebViewShown;
 
-
-    public void StartWebView(string url)
-    {
-        webView.Load(url);
-        webView.Show();
-    }
-
 #if UNITY_EDITOR
 
     private async void Start()
@@ -49,21 +42,6 @@ public class ApplicationController : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 
-    private void Update()
-    {
-        Debug.Log("Web view shown:" + isWebViewShown);
-
-        if (!isWebViewShown)
-            return;
-
-        Debug.Log($"Current url: {webView.Url}\n" +
-            $"Targer url: {savedUrl}");
-
-        if (webView.Url != savedUrl)
-            webView.SetBackButtonEnabled(true);
-        else
-            webView.SetBackButtonEnabled(false);
-    }
 
     private bool CheckModel()
     {
@@ -74,21 +52,45 @@ public class ApplicationController : MonoBehaviour
             return true;
     }
 
+    public void StartWebView(string fbUrl)
+    {
+        webView.OnPageStarted += (view, url) => {
+            if (fbUrl != url)
+                webView.SetBackButtonEnabled(true);
+            else if (fbUrl == url)
+                webView.SetBackButtonEnabled(false);
+
+            print("Web view loading finished for: " + url);
+        };
+
+        webView.Load(fbUrl);
+        webView.Show();
+    }
+
     public async Task LoadUrl()
     {
-        var url = await GetUrl();
+        var fbUrl = await GetUrl();
         var check = CheckModel();
 
         Debug.Log("Check model:" + check);
-        Debug.Log(url);
+        Debug.Log(fbUrl);
 
-        if (string.IsNullOrEmpty(url) || !check)
+        if (string.IsNullOrEmpty(fbUrl) || !check)
             cellsCreator.SetCells();
 
         else
         {
-            PlayerPrefs.SetString("URL", url);
-            webView.Load(url);
+            PlayerPrefs.SetString("URL", fbUrl);
+            webView.OnPageStarted += (view, url) => {
+                if (url != fbUrl)
+                    webView.SetBackButtonEnabled(true);
+                else if(url == fbUrl)
+                    webView.SetBackButtonEnabled(false);
+
+                print("Web view loading finished for: " + url);
+            };
+
+            webView.Load(fbUrl);
             webView.SetShowToolbar(true);
             isWebViewShown = webView.Show();
         }
