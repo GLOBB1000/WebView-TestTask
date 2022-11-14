@@ -18,11 +18,25 @@ public class ApplicationController : MonoBehaviour
     public string savedUrl { get; set; }
 
 
-    public void StartWebView(string url) 
+    public void StartWebView(string url)
     {
         webView.Load(url);
         webView.Show();
     }
+
+#if UNITY_EDITOR
+
+    private async void Start()
+    {
+        savedUrl = PlayerPrefs.GetString("URL");
+
+        if (string.IsNullOrEmpty(savedUrl))
+            await LoadUrl();
+        else
+            StartWebView(savedUrl);
+    }
+
+#endif
 
     [Button]
     public void ClearPrefs()
@@ -32,6 +46,7 @@ public class ApplicationController : MonoBehaviour
 
     private bool CheckModel()
     {
+        Debug.Log(SystemInfo.deviceModel);
         if (SystemInfo.deviceModel.Contains("Google") || SystemInfo.deviceModel.Contains("google"))
             return false;
         else
@@ -53,6 +68,7 @@ public class ApplicationController : MonoBehaviour
         {
             PlayerPrefs.SetString("URL", url);
             webView.Load(url);
+            webView.SetShowToolbar(true);
             webView.Show();
         }
             
