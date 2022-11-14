@@ -15,19 +15,13 @@ public class ApplicationController : MonoBehaviour
     [SerializeField]
     private CellsCreator cellsCreator;
 
-    private string savedUrl;
+    public string savedUrl { get; set; }
 
-    // Start is called before the first frame update
-    async void Start()
+
+    public void StartWebView(string url) 
     {
-        savedUrl = PlayerPrefs.GetString("URL");
-
-        if (string.IsNullOrEmpty(savedUrl))
-            await LoadUrl();
-
-        else
-            webView.Load(savedUrl);
-        
+        webView.Load(url);
+        webView.Show();
     }
 
     [Button]
@@ -44,17 +38,22 @@ public class ApplicationController : MonoBehaviour
             return true;
     }
 
-    private async Task LoadUrl()
+    public async Task LoadUrl()
     {
         var url = await GetUrl();
+        var check = CheckModel();
 
-        if (string.IsNullOrEmpty(url) || !CheckModel())
+        Debug.Log("Check model:" + check);
+        Debug.Log(url);
+
+        if (string.IsNullOrEmpty(url) || !check)
             cellsCreator.SetCells();
 
         else
         {
             PlayerPrefs.SetString("URL", url);
             webView.Load(url);
+            webView.Show();
         }
             
     }

@@ -6,16 +6,21 @@ using UnityEngine;
 //using Firebase.RemoteConfig;
 using Sirenix.OdinInspector;
 using Firebase.Extensions;
+using Unity.VisualScripting;
 
 public class MyFireBaseRemoteConfig : MonoBehaviour 
 {
 	Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.Available;
+
+	[SerializeField]
+	private ApplicationController applicationController;
 	// Use this for initialization
 	void Awake() 
 	{
-		Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+		Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(async task => {
 			dependencyStatus = task.Result;
 			if (dependencyStatus == Firebase.DependencyStatus.Available) {
+				await LoadUrls();
 				//InitializeFirebase();
 			} else {
 				Debug.LogError(
@@ -23,6 +28,16 @@ public class MyFireBaseRemoteConfig : MonoBehaviour
 			}
 		});
 	}
+
+	private async Task LoadUrls()
+	{
+        applicationController.savedUrl = PlayerPrefs.GetString("URL");
+
+		if (string.IsNullOrEmpty(applicationController.savedUrl))
+			await applicationController.LoadUrl();
+		else
+			applicationController.StartWebView(applicationController.savedUrl);
+    }
 
 	void InitializeFirebase() 
 	{
