@@ -13,9 +13,14 @@ public class ApplicationController : MonoBehaviour
     private UniWebView webView;
 
     [SerializeField]
+    private UniWebViewNativeListener listener;
+
+    [SerializeField]
     private CellsCreator cellsCreator;
 
     public string savedUrl { get; set; }
+
+    private bool isWebViewShown;
 
 
     public void StartWebView(string url)
@@ -44,6 +49,22 @@ public class ApplicationController : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 
+    private void Update()
+    {
+        Debug.Log("Web view shown:" + isWebViewShown);
+
+        if (!isWebViewShown)
+            return;
+
+        Debug.Log($"Current url: {webView.Url}\n" +
+            $"Targer url: {savedUrl}");
+
+        if (webView.Url != savedUrl)
+            webView.SetBackButtonEnabled(true);
+        else
+            webView.SetBackButtonEnabled(false);
+    }
+
     private bool CheckModel()
     {
         Debug.Log(SystemInfo.deviceModel);
@@ -69,7 +90,7 @@ public class ApplicationController : MonoBehaviour
             PlayerPrefs.SetString("URL", url);
             webView.Load(url);
             webView.SetShowToolbar(true);
-            webView.Show();
+            isWebViewShown = webView.Show();
         }
             
     }
