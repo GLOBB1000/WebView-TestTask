@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
-  <string name="firebase_database_url" translatable="false">https://webviewtest-89bb3-default-rtdb.europe-west1.firebasedatabase.app</string>
-  <string name="gcm_defaultSenderId" translatable="false">18304294047</string>
-  <string name="google_storage_bucket" translatable="false">webviewtest-89bb3.appspot.com</string>
-  <string name="project_id" translatable="false">webviewtest-89bb3</string>
-  <string name="google_api_key" translatable="false">AIzaSyBJj71gnqnQy9q5MQwDXVN4SZctd03IfBg</string>
-  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBJj71gnqnQy9q5MQwDXVN4SZctd03IfBg</string>
-  <string name="google_app_id" translatable="false">1:18304294047:android:b459f2fbd0c6f55ec3d6aa</string>
-  <string name="default_web_client_id" translatable="false">18304294047-pds323ut8e2idsp4q1dhdlh2pbhcgt48.apps.googleusercontent.com</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">18827548795</string>
+  <string name="google_storage_bucket" translatable="false">solartsna.appspot.com</string>
+  <string name="project_id" translatable="false">solartsna</string>
+  <string name="google_api_key" translatable="false">AIzaSyCKfQPwUmd__itrB_XB33V8JKtf55oMGrw</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCKfQPwUmd__itrB_XB33V8JKtf55oMGrw</string>
+  <string name="google_app_id" translatable="false">1:18827548795:android:bf9bff1e4e1fb271f6aade</string>
+  <string name="default_web_client_id" translatable="false">18827548795-v8iqpf6guq2hak56u3j7eecprmshph8b.apps.googleusercontent.com</string>
 </resources>

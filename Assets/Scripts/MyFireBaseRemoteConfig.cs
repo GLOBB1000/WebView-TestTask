@@ -12,6 +12,9 @@ public class MyFireBaseRemoteConfig : MonoBehaviour
 {
 	Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.Available;
 
+	public bool CanLoadUrl { get; private set; }
+	
+
 	[SerializeField]
 	private ApplicationController applicationController;
 	// Use this for initialization
@@ -20,9 +23,9 @@ public class MyFireBaseRemoteConfig : MonoBehaviour
 		Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(async task => {
 			dependencyStatus = task.Result;
 			if (dependencyStatus == Firebase.DependencyStatus.Available) {
-				await LoadUrls();
-				//InitializeFirebase();
-			} else {
+				CanLoadUrl = true;
+                //InitializeFirebase();
+            } else {
 				Debug.LogError(
 					"Could not resolve all Firebase dependencies: " + dependencyStatus);
 			}
@@ -69,11 +72,7 @@ public class MyFireBaseRemoteConfig : MonoBehaviour
 	public void ShowData() 
 	{
 		Debug.Log("URL: " +
-            Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue("url_string").StringValue);
-        Debug.Log("Some int: " +
-            Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue("someintvalue").StringValue);
-		Debug.Log("Test string " +
-            Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue("config_test_string").StringValue);
+            Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue("url").StringValue);
     }
 
 	[Button]

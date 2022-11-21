@@ -37,6 +37,4 @@ public class GameStats : MonoBehaviour
         pointsValue += 100;
         points.text = $"Your points: {pointsValue}";
     }
-
-
 }

@@ -27,6 +27,10 @@ public class CellsCreator : MonoBehaviour
     [SerializeField]
     private GameBehaviour gameBehaviour;
 
+    [SerializeField]
+    private CanvasGroup gameFader; 
+    
+
     public List<Cell> cells { get; set; }
 
     public int currentLevel { get; private set; }
@@ -36,11 +40,15 @@ public class CellsCreator : MonoBehaviour
     [SerializeField]
     private HashSet<Sprite> sprites = new HashSet<Sprite>();
 
+    [SerializeField]
+    private CanvasScaler canvasScaler;
+
     private bool isCoroutineStarted;
 
     // Start is called before the first frame update
     void Start()
     {
+        canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
         gameBehaviour.OnLevelCompleted += GameBehaviour_OnLevelCompleted;
         //SetCells();
     }
@@ -50,9 +58,20 @@ public class CellsCreator : MonoBehaviour
         gameBehaviour.OnLevelCompleted -= GameBehaviour_OnLevelCompleted;
     }
 
+    public void StartGame()
+    {
+        gameFader.DOFade(1, 1).OnComplete(() =>
+        {
+            SetCells();
+        });
+    }
+
     private void GameBehaviour_OnLevelCompleted()
     {
         ++currentLevel;
+
+        if(currentLevel > gameSettings.countOfSpawnedObjects.Count - 1)
+            currentLevel = gameSettings.countOfSpawnedObjects.Count - 1;
 
         foreach (var item in cells)
         {
@@ -86,7 +105,7 @@ public class CellsCreator : MonoBehaviour
 
         List<Sprite> gameSprites = new List<Sprite>();
 
-        while(gameSprites.Count < gameSettings.countOfSpawnedObjects[currentLevel])
+        while (gameSprites.Count < gameSettings.countOfSpawnedObjects[currentLevel])
         {
             var index = UnityRandom.Range(0, cellSprites.Count);
             if (sprites.Add(cellSprites[index]))
@@ -126,6 +145,7 @@ public class CellsCreator : MonoBehaviour
 
     private void ShowCellsOnStart()
     {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
         foreach (var cel in cells)
         {
             cel.cellState = Cell.CellState.OPEN;

